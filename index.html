@@ -76,6 +76,18 @@ h2 { margin: 0; font-size: 16px; font-weight: 600; }
 .tip { position: absolute; pointer-events: none; background: var(--tip); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); padding: 6px 10px; font-size: 12px; white-space: nowrap; color: var(--ink); opacity: 0; transition: opacity .12s; z-index: 2; }
 .tip b { font-weight: 600; }
 .tip .d { color: var(--muted); margin-right: 6px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; font-variant-numeric: tabular-nums; }
+th { text-align: right; font-weight: 500; font-size: 12px; color: var(--muted); padding: 6px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { text-align: right; padding: 9px 6px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; padding-left: 0; }
+th:last-child, td:last-child { padding-right: 0; }
+tr:last-child td { border-bottom: 0; }
+td .wd { color: var(--muted); font-size: 12px; margin-left: 4px; }
+td.c { position: relative; padding-right: 20px; }
+th.c { padding-right: 20px; }
+td.ok::after { content: "✓"; position: absolute; right: 5px; color: var(--ink2); font-size: 11px; }
+td.dim { color: var(--muted); }
+tr.live td:first-child::after { content: "进行中"; margin-left: 6px; font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; }
 footer { color: var(--muted); font-size: 12px; text-align: center; line-height: 1.6; margin-top: 6px; }
 </style>
 </head>
@@ -121,10 +133,15 @@ footer { color: var(--muted); font-size: 12px; text-align: center; line-height: 
     <div class="chart" id="c-protein"></div>
   </section>
 
+  <section class="card">
+    <div class="head"><h2>每天明细</h2><p class="note">✓ 表示达标</p></div>
+    <table><thead><tr><th>日期</th><th class="c">热量</th><th class="c">蛋白</th><th>体重</th><th>训练</th></tr></thead><tbody id="rows"></tbody></table>
+  </section>
+
   <footer id="foot"></footer>
 </main>
 
-<script id="data" type="application/json">{"updated": "2026-10-22 10:25", "today": "2026-10-22", "targets": {"kcal_low": 2000, "kcal_high": 2100, "protein_goal": 130, "strength_per_week": 2, "start_weight": 78.58}, "take": "近 7 天平均 1,943 千卡、蛋白 111 克，力量训练 0 次。这周先把第一次力量练了，在家 15 分钟就算。", "todayInfo": {"kcal": 509, "protein": 30, "weight": 77.65, "weightDelta": -0.35}, "week": {"from": "2026-10-15", "to": "2026-10-21", "avgKcal": 1943, "avgProtein": 111, "proteinDays": 1, "daysLogged": 7, "avgWeight": 78.0, "weightChange": -0.58, "strength": 0}, "days": [{"date": "2026-10-10", "kcal": 1770, "protein": 86, "weight": null, "avg7": null, "strength": 0, "walk": 1}, {"date": "2026-10-11", "kcal": 2015, "protein": 137, "weight": 78.58, "avg7": 78.58, "strength": 1, "walk": 1}, {"date": "2026-10-12", "kcal": 1750, "protein": 81, "weight": 78.37, "avg7": 78.47, "strength": 0, "walk": 0}, {"date": "2026-10-13", "kcal": 1845, "protein": 121, "weight": 77.85, "avg7": 78.27, "strength": 0, "walk": 0}, {"date": "2026-10-14", "kcal": 1870, "protein": 81, "weight": 78.35, "avg7": 78.29, "strength": 0, "walk": 0}, {"date": "2026-10-15", "kcal": 2310, "protein": 134, "weight": 77.75, "avg7": 78.18, "strength": 0, "walk": 0}, {"date": "2026-10-16", "kcal": 1970, "protein": 119, "weight": 78.3, "avg7": 78.2, "strength": 0, "walk": 0}, {"date": "2026-10-17", "kcal": 1530, "protein": 60, "weight": 78.4, "avg7": 78.23, "strength": 0, "walk": 0}, {"date": "2026-10-18", "kcal": 2130, "protein": 102, "weight": null, "avg7": null, "strength": 0, "walk": 0}, {"date": "2026-10-19", "kcal": 1591, "protein": 111, "weight": 78.0, "avg7": 78.15, "strength": 0, "walk": 0}, {"date": "2026-10-20", "kcal": 2130, "protein": 129, "weight": 77.93, "avg7": 78.08, "strength": 0, "walk": 0}, {"date": "2026-10-21", "kcal": 1940, "protein": 121, "weight": 78.0, "avg7": 78.1, "strength": 0, "walk": 0}, {"date": "2026-10-22", "kcal": 509, "protein": 30, "weight": 77.65, "avg7": 78.0, "strength": 0, "walk": 0}]}</script>
+<script id="data" type="application/json">{"updated": "2026-10-22 10:34", "today": "2026-10-22", "targets": {"kcal_low": 2000, "kcal_high": 2100, "protein_goal": 130, "strength_per_week": 2, "start_weight": 78.58}, "take": "近 7 天平均 1,943 千卡、蛋白 111 克，力量训练 0 次。这周先把第一次力量练了，在家 15 分钟就算。", "todayInfo": {"kcal": 509, "protein": 30, "weight": 77.65, "weightDelta": -0.35}, "week": {"from": "2026-10-15", "to": "2026-10-21", "avgKcal": 1943, "avgProtein": 111, "proteinDays": 1, "daysLogged": 7, "avgWeight": 78.0, "weightChange": -0.58, "strength": 0}, "days": [{"date": "2026-10-10", "kcal": 1770, "protein": 86, "weight": null, "avg7": null, "strength": 0, "walk": 1}, {"date": "2026-10-11", "kcal": 2015, "protein": 137, "weight": 78.58, "avg7": 78.58, "strength": 1, "walk": 1}, {"date": "2026-10-12", "kcal": 1750, "protein": 81, "weight": 78.37, "avg7": 78.47, "strength": 0, "walk": 0}, {"date": "2026-10-13", "kcal": 1845, "protein": 121, "weight": 77.85, "avg7": 78.27, "strength": 0, "walk": 0}, {"date": "2026-10-14", "kcal": 1870, "protein": 81, "weight": 78.35, "avg7": 78.29, "strength": 0, "walk": 0}, {"date": "2026-10-15", "kcal": 2310, "protein": 134, "weight": 77.75, "avg7": 78.18, "strength": 0, "walk": 0}, {"date": "2026-10-16", "kcal": 1970, "protein": 119, "weight": 78.3, "avg7": 78.2, "strength": 0, "walk": 0}, {"date": "2026-10-17", "kcal": 1530, "protein": 60, "weight": 78.4, "avg7": 78.23, "strength": 0, "walk": 0}, {"date": "2026-10-18", "kcal": 2130, "protein": 102, "weight": null, "avg7": null, "strength": 0, "walk": 0}, {"date": "2026-10-19", "kcal": 1591, "protein": 111, "weight": 78.0, "avg7": 78.15, "strength": 0, "walk": 0}, {"date": "2026-10-20", "kcal": 2130, "protein": 129, "weight": 77.93, "avg7": 78.08, "strength": 0, "walk": 0}, {"date": "2026-10-21", "kcal": 1940, "protein": 121, "weight": 78.0, "avg7": 78.1, "strength": 0, "walk": 0}, {"date": "2026-10-22", "kcal": 509, "protein": 30, "weight": 77.65, "avg7": 78.0, "strength": 0, "walk": 0}]}</script>
 <script>
 (() => {
   const D = JSON.parse(document.getElementById('data').textContent);
@@ -274,6 +291,20 @@ footer { color: var(--muted); font-size: 12px; text-align: center; line-height: 
   }
   draw();
   let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(draw, 120); });
+
+  // 每天明细：新的在上面
+  $('rows').innerHTML = D.days.slice().reverse().filter((r) => r.kcal || r.weight != null).map((r) => {
+    const live = r.date === D.today;
+    const kOk = !live && r.kcal >= T.kcal_low - 100 && r.kcal <= T.kcal_high + 50;
+    const pOk = !live && r.protein >= T.protein_goal;
+    const act = r.strength ? '力量' : r.walk ? '走路' : '—';
+    return `<tr class="${live ? 'live' : ''}">
+      <td>${md(r.date)}<span class="wd">${WK[new Date(r.date + 'T12:00:00Z').getUTCDay()]}</span></td>
+      <td class="c ${kOk ? 'ok' : ''}">${r.kcal ? fmt(r.kcal) : '—'}</td>
+      <td class="c ${pOk ? 'ok' : ''}">${r.protein ? fmt(r.protein) : '—'}</td>
+      <td class="${r.weight == null ? 'dim' : ''}">${r.weight == null ? '—' : r.weight.toFixed(2)}</td>
+      <td class="${act === '—' ? 'dim' : ''}">${act}</td></tr>`;
+  }).join('');
 
   $('foot').innerHTML = `更新于 ${D.updated}<br>这里只公开每天的汇总数字，明细在私有仓库里`;
 })();
