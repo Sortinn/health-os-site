@@ -56,6 +56,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .view.on { display: block; }
 .large { margin: 0 0 2px; font-size: 34px; font-weight: 700; letter-spacing: .01em; }
 .sub { margin: 0 0 18px; color: var(--muted); font-size: 15px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.upd { margin-left: auto; font-size: 13px; }
+#updated { margin-left: auto; font-size: 13px; }
 .pill { font-size: 12px; color: var(--ink2); border: 1px solid var(--sep); border-radius: 999px; padding: 1px 8px; }
 
 /* 首页圆环 */
@@ -150,7 +152,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 <main>
   <section class="view" id="v-today" data-title="今天">
     <h1 class="large">今天</h1>
-    <p class="sub"><span id="today-date"></span><span class="pill">进行中</span></p>
+    <p class="sub"><span id="today-date"></span><span class="pill">进行中</span><span id="updated"></span></p>
     <div class="rings">
       <svg viewBox="0 0 148 148" id="rings" aria-hidden="true"></svg>
       <div class="legend-rows">
@@ -235,6 +237,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   // ---------- 今天 ----------
   const td = dt(D.today);
   $('today-date').textContent = `${td.getUTCMonth() + 1} 月 ${td.getUTCDate()} 日 周${wk(D.today)}`;
+  // 更新时间：今天的只写时刻，不是今天的带上日期
+  const [uDate, uTime] = D.updated.split(' ');
+  const upd = uDate === D.today ? `${uTime} 更新` : `${md(uDate)} ${uTime} 更新`;
+  $('updated').textContent = upd;
+  document.querySelectorAll('.view .sub').forEach((el, i) => { if (i > 0) el.insertAdjacentHTML('beforeend', `<span class="upd">${upd}</span>`); });
   function ring(svg, cx, r, w, frac, color, track) {
     el('circle', { cx, cy: cx, r, fill: 'none', stroke: v(track), 'stroke-width': w }, svg);
     const c = 2 * Math.PI * r, f = Math.max(0, Math.min(1, frac));
