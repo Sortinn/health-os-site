@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>health-os</title>
+<style>
+:root {
+  color-scheme: light;
+  --page: #f5f4ef; --panel: #fcfcfb; --line: rgba(11,11,11,.08); --ink: #141413; --ink2: #52514e;
+  --muted: #898781; --grid: #e8e7e1; --track: #ebeae4; --series: #2a78d6; --soft: #cde2fb; --dot: #a8a69e;
+  --tip: #ffffff; --shadow: 0 6px 24px rgba(0,0,0,.10);
+  --sans: system-ui, -apple-system, "PingFang SC", "Noto Sans SC", "Segoe UI", sans-serif;
+  --serif: "Songti SC", "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --page: #1f1e1d; --panel: #2a2927; --line: rgba(255,255,255,.08); --ink: #f0efec; --ink2: #c3c2b7;
+    --muted: #8f8d86; --grid: #383835; --track: #3a3936; --series: #3987e5; --soft: #1c3a5e; --dot: #77756e;
+    --tip: #333230; --shadow: 0 6px 24px rgba(0,0,0,.45);
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--page); color: var(--ink); font-family: var(--sans); -webkit-text-size-adjust: 100%; }
+main { max-width: 760px; margin: 0 auto; padding: 24px 16px 40px; display: grid; gap: 14px; }
+.eyebrow { margin: 0; color: var(--muted); font-size: 12px; letter-spacing: .02em; }
+h1 { margin: 4px 0 6px; font-family: var(--serif); font-weight: 400; font-size: 30px; line-height: 1.2; }
+.take { margin: 0; color: var(--ink2); font-size: 14px; line-height: 1.65; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 12px; min-width: 0; }
+.head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+h2 { margin: 0; font-size: 16px; font-weight: 600; }
+.note { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
+.chip i { width: 7px; height: 7px; border-radius: 50%; background: var(--series); }
+.num { font-family: var(--serif); font-weight: 400; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.unit { color: var(--muted); font-size: 12px; margin-left: 4px; }
+.meter { display: grid; gap: 7px; }
+.meter-top { display: flex; align-items: baseline; justify-content: space-between; }
+.label { color: var(--muted); font-size: 12px; }
+.meter .num { font-size: 26px; }
+.track { position: relative; height: 10px; border-radius: 999px; background: var(--track); overflow: hidden; }
+.track .band { position: absolute; top: 0; bottom: 0; background: var(--soft); }
+.track .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; background: var(--series); min-width: 10px; }
+.track .goal { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--ink2); }
+.meter .sub { margin: 0; color: var(--ink2); font-size: 12px; }
+.weigh { border-top: 1px solid var(--line); padding-top: 10px; color: var(--ink2); font-size: 13px; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-top: 8px; }
+.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (min-width: 640px) { .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.tile { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 6px; align-content: start; }
+.tile .num { font-size: 30px; }
+.tile .sub { margin: 0; color: var(--ink2); font-size: 12px; line-height: 1.45; }
+.strip { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; gap: 4px; }
+.day { display: grid; justify-items: center; gap: 6px; }
+.day .wd { color: var(--muted); font-size: 12px; }
+.day .mk { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--track); display: grid; place-items: center; font-size: 11px; font-variant-numeric: tabular-nums; color: var(--ink2); }
+.day.walk .mk { background: var(--soft); border-color: var(--series); }
+.day.strength .mk { background: var(--series); border-color: var(--series); color: #fff; }
+.day.today .wd { color: var(--ink); font-weight: 600; }
+.legend { display: flex; gap: 12px; color: var(--muted); font-size: 12px; flex-wrap: wrap; }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.legend i { display: inline-block; }
+.lg-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--dot); }
+.lg-line { width: 14px; height: 2px; border-radius: 1px; background: var(--series); }
+.lg-band { width: 14px; height: 10px; border-radius: 2px; background: var(--soft); }
+.lg-ref { width: 14px; height: 1px; background: var(--ink2); }
+.lg-bar { width: 10px; height: 10px; border-radius: 2px; background: var(--series); }
+.lg-faded { width: 10px; height: 10px; border-radius: 2px; background: var(--series); opacity: .4; }
+.lg-strength { width: 10px; height: 10px; border-radius: 50%; background: var(--series); }
+.lg-walk { width: 10px; height: 10px; border-radius: 50%; background: var(--soft); border: 1px solid var(--series); }
+.chart { position: relative; width: 100%; height: 190px; touch-action: pan-y; }
+.chart svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.chart text { font-family: var(--sans); font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+.tip { position: absolute; pointer-events: none; background: var(--tip); border: 1px solid var(--line); border-radius: 10px; box-shadow: var(--shadow); padding: 6px 10px; font-size: 12px; white-space: nowrap; color: var(--ink); opacity: 0; transition: opacity .12s; z-index: 2; }
+.tip b { font-weight: 600; }
+.tip .d { color: var(--muted); margin-right: 6px; }
+footer { color: var(--muted); font-size: 12px; text-align: center; line-height: 1.6; margin-top: 6px; }
+</style>
+</head>
+<body>
+<main id="app">
+  <header>
+    <p class="eyebrow">health-os · 减脂增肌</p>
+    <h1 id="date">—</h1>
+    <p class="take" id="take"></p>
+  </header>
+
+  <section class="card" id="today">
+    <div class="head"><h2>今天</h2><span class="chip"><i></i>进行中</span></div>
+    <div class="meter" id="m-kcal"></div>
+    <div class="meter" id="m-protein"></div>
+    <div class="weigh" id="weigh"></div>
+  </section>
+
+  <div class="section-head"><h2>近 7 天</h2><p class="note" id="week-note"></p></div>
+  <div class="tiles" id="tiles"></div>
+
+  <section class="card">
+    <div class="head"><h2>训练</h2>
+      <div class="legend"><span><i class="lg-strength"></i>力量</span><span><i class="lg-walk"></i>走路</span></div></div>
+    <div class="strip" id="strip"></div>
+  </section>
+
+  <section class="card">
+    <div class="head"><h2>体重</h2><p class="note">公斤</p></div>
+    <div class="legend"><span><i class="lg-dot"></i>每天称重</span><span><i class="lg-line"></i>最近 7 次平均</span><span><i class="lg-ref"></i>起点</span></div>
+    <div class="chart" id="c-weight"></div>
+  </section>
+
+  <section class="card">
+    <div class="head"><h2>热量</h2><p class="note">千卡</p></div>
+    <div class="legend"><span><i class="lg-bar"></i>每天</span><span><i class="lg-band"></i>目标区间</span><span><i class="lg-faded"></i>今天（进行中）</span></div>
+    <div class="chart" id="c-kcal"></div>
+  </section>
+
+  <section class="card">
+    <div class="head"><h2>蛋白质</h2><p class="note">克</p></div>
+    <div class="legend"><span><i class="lg-bar"></i>每天</span><span><i class="lg-ref"></i>目标</span><span><i class="lg-faded"></i>今天（进行中）</span></div>
+    <div class="chart" id="c-protein"></div>
+  </section>
+
+  <footer id="foot"></footer>
+</main>
+
+<script id="data" type="application/json">{"updated": "2026-10-22 10:25", "today": "2026-10-22", "targets": {"kcal_low": 2000, "kcal_high": 2100, "protein_goal": 130, "strength_per_week": 2, "start_weight": 78.58}, "take": "近 7 天平均 1,943 千卡、蛋白 111 克，力量训练 0 次。这周先把第一次力量练了，在家 15 分钟就算。", "todayInfo": {"kcal": 509, "protein": 30, "weight": 77.65, "weightDelta": -0.35}, "week": {"from": "2026-10-15", "to": "2026-10-21", "avgKcal": 1943, "avgProtein": 111, "proteinDays": 1, "daysLogged": 7, "avgWeight": 78.0, "weightChange": -0.58, "strength": 0}, "days": [{"date": "2026-10-10", "kcal": 1770, "protein": 86, "weight": null, "avg7": null, "strength": 0, "walk": 1}, {"date": "2026-10-11", "kcal": 2015, "protein": 137, "weight": 78.58, "avg7": 78.58, "strength": 1, "walk": 1}, {"date": "2026-10-12", "kcal": 1750, "protein": 81, "weight": 78.37, "avg7": 78.47, "strength": 0, "walk": 0}, {"date": "2026-10-13", "kcal": 1845, "protein": 121, "weight": 77.85, "avg7": 78.27, "strength": 0, "walk": 0}, {"date": "2026-10-14", "kcal": 1870, "protein": 81, "weight": 78.35, "avg7": 78.29, "strength": 0, "walk": 0}, {"date": "2026-10-15", "kcal": 2310, "protein": 134, "weight": 77.75, "avg7": 78.18, "strength": 0, "walk": 0}, {"date": "2026-10-16", "kcal": 1970, "protein": 119, "weight": 78.3, "avg7": 78.2, "strength": 0, "walk": 0}, {"date": "2026-10-17", "kcal": 1530, "protein": 60, "weight": 78.4, "avg7": 78.23, "strength": 0, "walk": 0}, {"date": "2026-10-18", "kcal": 2130, "protein": 102, "weight": null, "avg7": null, "strength": 0, "walk": 0}, {"date": "2026-10-19", "kcal": 1591, "protein": 111, "weight": 78.0, "avg7": 78.15, "strength": 0, "walk": 0}, {"date": "2026-10-20", "kcal": 2130, "protein": 129, "weight": 77.93, "avg7": 78.08, "strength": 0, "walk": 0}, {"date": "2026-10-21", "kcal": 1940, "protein": 121, "weight": 78.0, "avg7": 78.1, "strength": 0, "walk": 0}, {"date": "2026-10-22", "kcal": 509, "protein": 30, "weight": 77.65, "avg7": 78.0, "strength": 0, "walk": 0}]}</script>
+<script>
+(() => {
+  const D = JSON.parse(document.getElementById('data').textContent);
+  const T = D.targets, WK = '日一二三四五六';
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => Math.round(n).toLocaleString('en-US');
+  const signed = (n) => (n > 0 ? '+' : n < 0 ? '−' : '±') + Math.abs(n).toFixed(2);
+  const md = (s) => { const [, m, d] = s.split('-').map(Number); return `${m}/${d}`; };
+  const wd = (s) => WK[new Date(s + 'T00:00:00+08:00').getUTCDay() === 0 ? 0 : new Date(s + 'T12:00:00Z').getUTCDay()];
+
+  // 头部
+  const [y, m, d] = D.today.split('-').map(Number);
+  $('date').textContent = `${m} 月 ${d} 日 周${wd(D.today)}`;
+  $('take').textContent = D.take;
+
+  // 今天
+  const ti = D.todayInfo;
+  const kTop = T.kcal_high * 1.25, pTop = T.protein_goal * 1.25;
+  const left = T.kcal_high - ti.kcal, lp = T.protein_goal - ti.protein;
+  $('m-kcal').innerHTML = `
+    <div class="meter-top"><span class="label">热量</span><span><b class="num">${fmt(ti.kcal)}</b><span class="unit">/ ${fmt(T.kcal_low)}–${fmt(T.kcal_high)} 千卡</span></span></div>
+    <div class="track"><span class="band" style="left:${T.kcal_low / kTop * 100}%;width:${(T.kcal_high - T.kcal_low) / kTop * 100}%"></span>
+      <span class="fill" style="width:${Math.min(1, ti.kcal / kTop) * 100}%"></span></div>
+    <p class="sub">${left >= 0 ? `还能吃 ${fmt(left)} 千卡` : `超了 ${fmt(-left)} 千卡`}</p>`;
+  $('m-protein').innerHTML = `
+    <div class="meter-top"><span class="label">蛋白质</span><span><b class="num">${fmt(ti.protein)}</b><span class="unit">/ ${T.protein_goal} 克</span></span></div>
+    <div class="track"><span class="fill" style="width:${Math.min(1, ti.protein / pTop) * 100}%"></span>
+      <span class="goal" style="left:${T.protein_goal / pTop * 100}%"></span></div>
+    <p class="sub">${lp > 0 ? `还差 ${fmt(lp)} 克` : '已达标'}</p>`;
+  $('weigh').textContent = ti.weight == null ? '今天还没称体重'
+    : `今早体重 ${ti.weight.toFixed(2)} 公斤` + (ti.weightDelta == null ? '' : `，比上次 ${signed(ti.weightDelta)}`);
+
+  // 近 7 天
+  const w = D.week;
+  $('week-note').textContent = `${md(w.from)} 至 ${md(w.to)}，吃的只算吃完的天`;
+  const tiles = [
+    ['平均体重', w.avgWeight.toFixed(2), '公斤', `比起点 ${signed(w.weightChange)} 公斤`],
+    ['平均热量', fmt(w.avgKcal), '千卡', `目标 ${fmt(T.kcal_low)}–${fmt(T.kcal_high)}`],
+    ['平均蛋白', fmt(w.avgProtein), '克', `${w.proteinDays} 天到了 ${T.protein_goal} 克`],
+    ['力量训练', String(w.strength), `/ ${T.strength_per_week} 次`, '在家练也算'],
+  ];
+  $('tiles').innerHTML = tiles.map(([l, v, u, s]) =>
+    `<div class="tile"><span class="label">${l}</span><span><b class="num">${v}</b><span class="unit">${u}</span></span><p class="sub">${s}</p></div>`).join('');
+
+  // 训练打卡：最近 7 天
+  const byDate = Object.fromEntries(D.days.map((r) => [r.date, r]));
+  const end = new Date(D.today + 'T12:00:00Z');
+  let strip = '';
+  for (let k = 6; k >= 0; k--) {
+    const dt = new Date(end); dt.setUTCDate(dt.getUTCDate() - k);
+    const s = dt.toISOString().slice(0, 10), r = byDate[s];
+    const cls = r && r.strength ? 'strength' : r && r.walk ? 'walk' : '';
+    strip += `<div class="day ${cls} ${k === 0 ? 'today' : ''}" title="${md(s)} ${cls === 'strength' ? '力量' : cls === 'walk' ? '走路' : '没练'}">
+      <span class="wd">${WK[dt.getUTCDay()]}</span><span class="mk">${dt.getUTCDate()}</span></div>`;
+  }
+  $('strip').innerHTML = strip;
+
+  // 图表
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, attrs, parent) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); parent && parent.appendChild(n); return n; };
+  const css = (v) => `var(--${v})`;
+
+  function frame(box, y0, y1, ticks, tickFmt) {
+    box.innerHTML = '';
+    const W = box.clientWidth, H = box.clientHeight, L = 40, R = 10, Tp = 8, B = 24;
+    const svg = el('svg', { viewBox: `0 0 ${W} ${H}` }, box);
+    const days = D.days, n = days.length, pw = W - L - R, ph = H - Tp - B, band = pw / n;
+    const X = (i) => L + band * (i + 0.5), Y = (v) => Tp + ph * (1 - (v - y0) / (y1 - y0));
+    for (const v of ticks) {
+      el('line', { x1: L, x2: W - R, y1: Y(v), y2: Y(v), stroke: css('grid') }, svg);
+      el('text', { x: L - 6, y: Y(v) + 4, 'text-anchor': 'end' }, svg).textContent = tickFmt(v);
+    }
+    const step = n <= 8 ? 1 : n <= 16 ? 3 : 7;
+    days.forEach((r, i) => { if ((n - 1 - i) % step === 0) el('text', { x: X(i), y: H - 6, 'text-anchor': 'middle' }, svg).textContent = md(r.date); });
+    const tip = document.createElement('div'); tip.className = 'tip'; box.appendChild(tip);
+    const cross = el('line', { y1: Tp, y2: Tp + ph, stroke: css('muted'), 'stroke-opacity': .5, opacity: 0 }, svg);
+    return { svg, W, H, L, R, Tp, B, pw, ph, band, X, Y, n, tip, cross };
+  }
+
+  function hover(f, label) {
+    const show = (ev) => {
+      const rect = f.svg.getBoundingClientRect();
+      const px = (ev.touches ? ev.touches[0].clientX : ev.clientX) - rect.left;
+      const i = Math.max(0, Math.min(f.n - 1, Math.floor((px - f.L) / f.band)));
+      const text = label(D.days[i]);
+      if (!text) { f.tip.style.opacity = 0; f.cross.setAttribute('opacity', 0); return; }
+      f.tip.innerHTML = `<span class="d">${md(D.days[i].date)} 周${WK[new Date(D.days[i].date + 'T12:00:00Z').getUTCDay()]}</span>${text}`;
+      f.cross.setAttribute('x1', f.X(i)); f.cross.setAttribute('x2', f.X(i)); f.cross.setAttribute('opacity', 1);
+      const tw = f.tip.offsetWidth;
+      f.tip.style.left = Math.max(0, Math.min(f.W - tw, f.X(i) - tw / 2)) + 'px';
+      f.tip.style.top = '-8px';
+      f.tip.style.opacity = 1;
+    };
+    const hide = () => { f.tip.style.opacity = 0; f.cross.setAttribute('opacity', 0); };
+    f.svg.addEventListener('pointermove', show);
+    f.svg.addEventListener('pointerdown', show);
+    // 鼠标移出就隐藏；手指点完会触发 pointerleave，不能跟着隐藏，改成点别处再隐藏
+    f.svg.addEventListener('pointerleave', (ev) => { if (ev.pointerType === 'mouse') hide(); });
+    document.addEventListener('pointerdown', (ev) => { if (!f.svg.contains(ev.target)) hide(); });
+  }
+
+  function weightChart() {
+    const box = $('c-weight');
+    const vals = D.days.filter((r) => r.weight != null).map((r) => r.weight).concat([T.start_weight]);
+    const lo = Math.floor((Math.min(...vals) - 0.2) * 2) / 2, hi = Math.ceil((Math.max(...vals) + 0.2) * 2) / 2;
+    const ticks = []; for (let v = lo; v <= hi + 1e-9; v += 0.5) ticks.push(v);
+    const f = frame(box, lo, hi, ticks, (v) => v.toFixed(1));
+    el('line', { x1: f.L, x2: f.W - f.R, y1: f.Y(T.start_weight), y2: f.Y(T.start_weight), stroke: css('ink2'), 'stroke-opacity': .55 }, f.svg);
+    const pts = [];
+    D.days.forEach((r, i) => {
+      if (r.weight == null) return;
+      el('circle', { cx: f.X(i), cy: f.Y(r.weight), r: 4, fill: css('dot'), stroke: css('panel'), 'stroke-width': 2 }, f.svg);
+      if (r.avg7 != null) pts.push([f.X(i), f.Y(r.avg7)]);
+    });
+    if (pts.length) {
+      el('polyline', { points: pts.map((p) => p.join(',')).join(' '), fill: 'none', stroke: css('series'), 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, f.svg);
+      const [lx, ly] = pts[pts.length - 1];
+      el('circle', { cx: lx, cy: ly, r: 4.5, fill: css('series'), stroke: css('panel'), 'stroke-width': 2 }, f.svg);
+    }
+    hover(f, (r) => r.weight == null ? '' : `称重 <b>${r.weight.toFixed(2)}</b> · 7 次平均 <b>${r.avg7.toFixed(2)}</b>`);
+  }
+
+  function barChart(id, key, top, step, opts) {
+    const box = $(id);
+    const ticks = []; for (let v = 0; v <= top; v += step) ticks.push(v);
+    const f = frame(box, 0, top, ticks, opts.tickFmt || ((v) => String(v)));
+    if (opts.band) el('rect', { x: f.L, width: f.pw, y: f.Y(opts.band[1]), height: f.Y(opts.band[0]) - f.Y(opts.band[1]), fill: css('soft'), 'fill-opacity': .85 }, f.svg);
+    const w = Math.min(20, f.band - 3);
+    D.days.forEach((r, i) => {
+      const v = r[key]; if (!v) return;
+      const x0 = f.X(i) - w / 2, x1 = f.X(i) + w / 2, yt = f.Y(Math.min(v, top)), yb = f.Y(0), rr = Math.min(4, yb - yt, w / 2);
+      el('path', { d: `M${x0},${yb} V${yt + rr} Q${x0},${yt} ${x0 + rr},${yt} H${x1 - rr} Q${x1},${yt} ${x1},${yt + rr} V${yb} Z`,
+        fill: css('series'), 'fill-opacity': r.date === D.today ? .4 : 1 }, f.svg);
+    });
+    if (opts.goal) el('line', { x1: f.L, x2: f.W - f.R, y1: f.Y(opts.goal), y2: f.Y(opts.goal), stroke: css('ink2') }, f.svg);
+    el('line', { x1: f.L, x2: f.W - f.R, y1: f.Y(0), y2: f.Y(0), stroke: css('muted'), 'stroke-opacity': .5 }, f.svg);
+    hover(f, (r) => !r[key] ? '' : `<b>${fmt(r[key])}</b> ${opts.unit}${r.date === D.today ? '（进行中）' : ''}`);
+  }
+
+  function draw() {
+    weightChart();
+    const kMax = Math.max(T.kcal_high, ...D.days.map((r) => r.kcal));
+    barChart('c-kcal', 'kcal', Math.ceil((kMax + 1) / 500) * 500, 500,
+      { band: [T.kcal_low, T.kcal_high], unit: '千卡', tickFmt: (v) => v ? (v / 1000) + 'K' : '0' });
+    const pMax = Math.max(T.protein_goal, ...D.days.map((r) => r.protein));
+    barChart('c-protein', 'protein', Math.ceil((pMax + 1) / 50) * 50, 50, { goal: T.protein_goal, unit: '克' });
+  }
+  draw();
+  let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(draw, 120); });
+
+  $('foot').innerHTML = `更新于 ${D.updated}<br>这里只公开每天的汇总数字，明细在私有仓库里`;
+})();
+</script>
+</body>
+</html>
