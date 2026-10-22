@@ -21,6 +21,8 @@
   --kcal: #2A78D6; --kcal-track: rgba(42,120,214,.16); --kcal-soft: rgba(42,120,214,.14);
   --pro: #EB6834; --pro-track: rgba(235,104,52,.16);
   --train: #1BAF7A; --train-track: rgba(27,175,122,.16);
+  --fat: #EDA100; --fat-track: rgba(237,161,0,.18);
+  --carb: #E87BA4; --carb-track: rgba(232,123,164,.18);
   --dot: #A9AEB6; --tip: #FFFFFF; --shadow: 0 8px 28px rgba(21,23,26,.12);
   --seg: #E4E6EA; --seg-on: #FFFFFF;
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Noto Sans SC", "Segoe UI", system-ui, sans-serif;
@@ -34,6 +36,8 @@
     --kcal: #3987E5; --kcal-track: rgba(57,135,229,.22); --kcal-soft: rgba(57,135,229,.20);
     --pro: #D95926; --pro-track: rgba(217,89,38,.24);
     --train: #199E70; --train-track: rgba(25,158,112,.24);
+    --fat: #C98500; --fat-track: rgba(201,133,0,.26);
+    --carb: #D55181; --carb-track: rgba(213,81,129,.26);
     --dot: #5E636B; --tip: #23272D; --shadow: 0 8px 28px rgba(0,0,0,.5);
     --seg: #23272D; --seg-on: #3A3F47;
   }
@@ -62,16 +66,23 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .pill { font-size: 12px; color: var(--ink2); border: 1px solid var(--sep); border-radius: 999px; padding: 1px 8px; }
 
 /* 首页圆环 */
-.rings { background: var(--surface); border-radius: 22px; padding: 20px 16px; display: grid; place-items: center; }
-.ring-wrap { position: relative; width: min(280px, 100%); aspect-ratio: 1; }
+.rings { background: var(--surface); border-radius: 22px; padding: 20px 16px 18px; display: grid; justify-items: center; gap: 18px; }
+.ring-wrap { position: relative; width: min(240px, 100%); aspect-ratio: 1; }
 .ring-wrap svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.ring-center { position: absolute; inset: 20%; display: grid; align-content: center; justify-items: center; gap: 8px; text-align: center; }
+.ring-center { position: absolute; inset: 16%; display: grid; align-content: center; justify-items: center; gap: 8px; text-align: center; }
 .ring-sep { width: 64%; border-top: .5px solid var(--sep); }
 .lr .k { display: flex; align-items: center; justify-content: center; gap: 5px; color: var(--ink2); font-size: 12px; }
 .lr .k i { width: 7px; height: 7px; border-radius: 50%; }
-.lr .v { margin-top: 1px; font-size: 28px; font-weight: 600; letter-spacing: -.01em; font-variant-numeric: tabular-nums; white-space: nowrap; line-height: 1.1; }
-.lr .v small { font-size: 12px; font-weight: 400; color: var(--muted); margin-left: 2px; letter-spacing: 0; }
-.lr .h { color: var(--muted); font-size: 11px; margin-top: 2px; }
+.lr .v { margin-top: 2px; font-size: 40px; font-weight: 600; letter-spacing: -.01em; font-variant-numeric: tabular-nums; white-space: nowrap; line-height: 1.1; }
+.lr .v small { display: block; margin-top: 2px; font-size: 13px; font-weight: 400; color: var(--muted); margin-left: 2px; letter-spacing: 0; }
+.lr .h { color: var(--muted); font-size: 12px; margin-top: 4px; }
+.minis { width: 100%; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; border-top: .5px solid var(--sep); padding-top: 16px; }
+.mini { display: grid; justify-items: center; gap: 5px; text-align: center; }
+.mini .mr { position: relative; width: 64px; height: 64px; }
+.mini svg { width: 64px; height: 64px; display: block; }
+.mini .mv { position: absolute; inset: 0; display: grid; place-items: center; font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.mini .ml { font-size: 12px; color: var(--ink2); line-height: 1.3; }
+.mini .ml small { display: block; color: var(--muted); font-size: 11px; }
 .advice { margin: 12px 4px 0; color: var(--ink2); font-size: 14px; line-height: 1.6; }
 
 /* 分组列表（iOS inset grouped） */
@@ -161,10 +172,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
         <svg viewBox="0 0 260 260" id="rings" aria-hidden="true"></svg>
         <div class="ring-center">
           <div class="lr"><div class="k"><i style="background:var(--kcal)"></i>热量</div><div class="v" id="r-kcal"></div><div class="h" id="r-kcal-h"></div></div>
-          <div class="ring-sep"></div>
-          <div class="lr"><div class="k"><i style="background:var(--pro)"></i>蛋白质</div><div class="v" id="r-pro"></div><div class="h" id="r-pro-h"></div></div>
         </div>
       </div>
+      <div class="minis" id="minis"></div>
     </div>
     <p class="advice" id="advice"></p>
 
@@ -182,6 +192,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
     <p class="sub">点图上的柱子或点，能看到当天的数</p>
     <div class="seg" role="group" aria-label="指标" id="metric">
       <button data-m="weight" aria-pressed="true">体重</button>
+      <button data-m="bodyFat" aria-pressed="false">体脂</button>
       <button data-m="kcal" aria-pressed="false">热量</button>
       <button data-m="protein" aria-pressed="false">蛋白质</button>
     </div>
@@ -224,7 +235,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   <button role="tab" data-v="train" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>训练</button>
 </nav>
 
-<script id="data" type="application/json">{"streak": 13, "startDate": "2026-10-10", "advice": "这周先把第一次力量练了，在家 15 分钟就算。", "log": [{"date": "2026-10-10", "kcal": 1770, "protein": 86, "weight": null, "strength": 0, "walk": 1}, {"date": "2026-10-11", "kcal": 2015, "protein": 137, "weight": 78.58, "strength": 1, "walk": 1}, {"date": "2026-10-12", "kcal": 1750, "protein": 81, "weight": 78.37, "strength": 0, "walk": 0}, {"date": "2026-10-13", "kcal": 1845, "protein": 121, "weight": 77.85, "strength": 0, "walk": 0}, {"date": "2026-10-14", "kcal": 1870, "protein": 81, "weight": 78.35, "strength": 0, "walk": 0}, {"date": "2026-10-15", "kcal": 2310, "protein": 134, "weight": 77.75, "strength": 0, "walk": 0}, {"date": "2026-10-16", "kcal": 1970, "protein": 119, "weight": 78.3, "strength": 0, "walk": 0}, {"date": "2026-10-17", "kcal": 1530, "protein": 60, "weight": 78.4, "strength": 0, "walk": 0}, {"date": "2026-10-18", "kcal": 2130, "protein": 102, "weight": null, "strength": 0, "walk": 0}, {"date": "2026-10-19", "kcal": 1591, "protein": 111, "weight": 78.0, "strength": 0, "walk": 0}, {"date": "2026-10-20", "kcal": 2130, "protein": 129, "weight": 77.93, "strength": 0, "walk": 0}, {"date": "2026-10-21", "kcal": 1940, "protein": 121, "weight": 78.0, "strength": 0, "walk": 0}, {"date": "2026-10-22", "kcal": 999, "protein": 64, "weight": 77.65, "strength": 0, "walk": 0}], "workouts": [{"date": "2026-10-11", "kind": "力量"}, {"date": "2026-10-11", "kind": "走路"}, {"date": "2026-10-10", "kind": "走路"}], "updated": "2026-10-22 11:49", "built": "1022.1453", "today": "2026-10-22", "targets": {"kcal_low": 2000, "kcal_high": 2100, "protein_goal": 130, "strength_per_week": 2, "start_weight": 78.58}, "take": "近 7 天平均 1,943 千卡、蛋白 111 克，力量训练 0 次。这周先把第一次力量练了，在家 15 分钟就算。", "todayInfo": {"kcal": 999, "protein": 64, "weight": 77.65, "weightDelta": -0.35}, "week": {"from": "2026-10-15", "to": "2026-10-21", "avgKcal": 1943, "avgProtein": 111, "proteinDays": 1, "daysLogged": 7, "avgWeight": 78.0, "weightChange": -0.58, "strength": 0}, "days": [{"date": "2026-10-10", "kcal": 1770, "protein": 86, "weight": null, "avg7": null, "strength": 0, "walk": 1}, {"date": "2026-10-11", "kcal": 2015, "protein": 137, "weight": 78.58, "avg7": 78.58, "strength": 1, "walk": 1}, {"date": "2026-10-12", "kcal": 1750, "protein": 81, "weight": 78.37, "avg7": 78.47, "strength": 0, "walk": 0}, {"date": "2026-10-13", "kcal": 1845, "protein": 121, "weight": 77.85, "avg7": 78.27, "strength": 0, "walk": 0}, {"date": "2026-10-14", "kcal": 1870, "protein": 81, "weight": 78.35, "avg7": 78.29, "strength": 0, "walk": 0}, {"date": "2026-10-15", "kcal": 2310, "protein": 134, "weight": 77.75, "avg7": 78.18, "strength": 0, "walk": 0}, {"date": "2026-10-16", "kcal": 1970, "protein": 119, "weight": 78.3, "avg7": 78.2, "strength": 0, "walk": 0}, {"date": "2026-10-17", "kcal": 1530, "protein": 60, "weight": 78.4, "avg7": 78.23, "strength": 0, "walk": 0}, {"date": "2026-10-18", "kcal": 2130, "protein": 102, "weight": null, "avg7": null, "strength": 0, "walk": 0}, {"date": "2026-10-19", "kcal": 1591, "protein": 111, "weight": 78.0, "avg7": 78.15, "strength": 0, "walk": 0}, {"date": "2026-10-20", "kcal": 2130, "protein": 129, "weight": 77.93, "avg7": 78.08, "strength": 0, "walk": 0}, {"date": "2026-10-21", "kcal": 1940, "protein": 121, "weight": 78.0, "avg7": 78.1, "strength": 0, "walk": 0}, {"date": "2026-10-22", "kcal": 999, "protein": 64, "weight": 77.65, "avg7": 78.0, "strength": 0, "walk": 0}]}</script>
+<script id="data" type="application/json">{"streak": 13, "startDate": "2026-10-10", "advice": "这周先把第一次力量练了，在家 15 分钟就算。", "log": [{"date": "2026-10-10", "kcal": 1770, "protein": 86, "fat": null, "carbs": null, "weight": null, "bodyFat": null, "strength": 0, "walk": 1}, {"date": "2026-10-11", "kcal": 2015, "protein": 137, "fat": null, "carbs": null, "weight": 78.58, "bodyFat": null, "strength": 1, "walk": 1}, {"date": "2026-10-12", "kcal": 1750, "protein": 81, "fat": null, "carbs": null, "weight": 78.37, "bodyFat": null, "strength": 0, "walk": 0}, {"date": "2026-10-13", "kcal": 1845, "protein": 121, "fat": null, "carbs": null, "weight": 77.85, "bodyFat": null, "strength": 0, "walk": 0}, {"date": "2026-10-14", "kcal": 1870, "protein": 81, "fat": null, "carbs": null, "weight": 78.35, "bodyFat": null, "strength": 0, "walk": 0}, {"date": "2026-10-15", "kcal": 2310, "protein": 134, "fat": null, "carbs": null, "weight": 77.75, "bodyFat": null, "strength": 0, "walk": 0}, {"date": "2026-10-16", "kcal": 1970, "protein": 119, "fat": null, "carbs": null, "weight": 78.3, "bodyFat": null, "strength": 0, "walk": 0}, {"date": "2026-10-17", "kcal": 1530, "protein": 60, "fat": null, "carbs": null, "weight": 78.4, "bodyFat": null, "strength": 0, "walk": 0}, {"date": "2026-10-18", "kcal": 2130, "protein": 102, "fat": null, "carbs": null, "weight": null, "bodyFat": null, "strength": 0, "walk": 0}, {"date": "2026-10-19", "kcal": 1591, "protein": 111, "fat": null, "carbs": null, "weight": 78.0, "bodyFat": 23.9, "strength": 0, "walk": 0}, {"date": "2026-10-20", "kcal": 2130, "protein": 129, "fat": null, "carbs": null, "weight": 77.93, "bodyFat": 25.8, "strength": 0, "walk": 0}, {"date": "2026-10-21", "kcal": 1940, "protein": 121, "fat": null, "carbs": null, "weight": 78.0, "bodyFat": 23.5, "strength": 0, "walk": 0}, {"date": "2026-10-22", "kcal": 999, "protein": 64, "fat": 33, "carbs": 112, "weight": 77.65, "bodyFat": 23.9, "strength": 0, "walk": 0}], "workouts": [{"date": "2026-10-11", "kind": "力量"}, {"date": "2026-10-11", "kind": "走路"}, {"date": "2026-10-10", "kind": "走路"}], "updated": "2026-10-22 15:14", "built": "1022.1514", "today": "2026-10-22", "targets": {"kcal_low": 2000, "kcal_high": 2100, "protein_goal": 130, "fat_goal": 60, "carb_goal": 250, "strength_per_week": 2, "start_weight": 78.58}, "take": "近 7 天平均 1,943 千卡、蛋白 111 克，力量训练 0 次。这周先把第一次力量练了，在家 15 分钟就算。", "todayInfo": {"kcal": 999, "protein": 64, "fat": 33, "carbs": 112, "bodyFat": 23.9, "weight": 77.65, "weightDelta": -0.35}, "week": {"from": "2026-10-15", "to": "2026-10-21", "avgKcal": 1943, "avgProtein": 111, "proteinDays": 1, "daysLogged": 7, "avgWeight": 78.0, "weightChange": -0.58, "strength": 0, "avgFat": null, "avgCarbs": null, "macroDays": 0, "medBodyFat": 23.9}, "days": [{"date": "2026-10-10", "kcal": 1770, "protein": 86, "fat": null, "carbs": null, "bodyFat": null, "weight": null, "avg7": null, "strength": 0, "walk": 1}, {"date": "2026-10-11", "kcal": 2015, "protein": 137, "fat": null, "carbs": null, "bodyFat": null, "weight": 78.58, "avg7": 78.58, "strength": 1, "walk": 1}, {"date": "2026-10-12", "kcal": 1750, "protein": 81, "fat": null, "carbs": null, "bodyFat": null, "weight": 78.37, "avg7": 78.47, "strength": 0, "walk": 0}, {"date": "2026-10-13", "kcal": 1845, "protein": 121, "fat": null, "carbs": null, "bodyFat": null, "weight": 77.85, "avg7": 78.27, "strength": 0, "walk": 0}, {"date": "2026-10-14", "kcal": 1870, "protein": 81, "fat": null, "carbs": null, "bodyFat": null, "weight": 78.35, "avg7": 78.29, "strength": 0, "walk": 0}, {"date": "2026-10-15", "kcal": 2310, "protein": 134, "fat": null, "carbs": null, "bodyFat": null, "weight": 77.75, "avg7": 78.18, "strength": 0, "walk": 0}, {"date": "2026-10-16", "kcal": 1970, "protein": 119, "fat": null, "carbs": null, "bodyFat": null, "weight": 78.3, "avg7": 78.2, "strength": 0, "walk": 0}, {"date": "2026-10-17", "kcal": 1530, "protein": 60, "fat": null, "carbs": null, "bodyFat": null, "weight": 78.4, "avg7": 78.23, "strength": 0, "walk": 0}, {"date": "2026-10-18", "kcal": 2130, "protein": 102, "fat": null, "carbs": null, "bodyFat": null, "weight": null, "avg7": null, "strength": 0, "walk": 0}, {"date": "2026-10-19", "kcal": 1591, "protein": 111, "fat": null, "carbs": null, "bodyFat": 23.9, "weight": 78.0, "avg7": 78.15, "strength": 0, "walk": 0}, {"date": "2026-10-20", "kcal": 2130, "protein": 129, "fat": null, "carbs": null, "bodyFat": 25.8, "weight": 77.93, "avg7": 78.08, "strength": 0, "walk": 0}, {"date": "2026-10-21", "kcal": 1940, "protein": 121, "fat": null, "carbs": null, "bodyFat": 23.5, "weight": 78.0, "avg7": 78.1, "strength": 0, "walk": 0}, {"date": "2026-10-22", "kcal": 999, "protein": 64, "fat": 33, "carbs": 112, "bodyFat": 23.9, "weight": 77.65, "avg7": 78.0, "strength": 0, "walk": 0}]}</script>
 <script>
 // 像 App 一样：不允许双指缩放（iOS Safari 会忽略 viewport 里的 user-scalable，所以再拦一次手势事件）
 ['gesturestart', 'gesturechange', 'gestureend'].forEach((t) => document.addEventListener(t, (e) => e.preventDefault(), { passive: false }));
@@ -258,15 +269,22 @@ document.addEventListener('touchmove', (e) => { if (e.touches.length > 1) e.prev
       'stroke-dasharray': `${c * f} ${c}`, transform: `rotate(-90 ${cx} ${cx})` }, svg);
   }
   const ti = D.todayInfo;
-  // 外圈热量、内圈蛋白质，中间放数字
-  ring($('rings'), 130, 120, 16, ti.kcal / T.kcal_high, 'kcal', 'kcal-track');
-  ring($('rings'), 130, 100, 16, ti.protein / T.protein_goal, 'pro', 'pro-track');
+  // 大圆环：热量；下面一排小圆环：蛋白质、脂肪、碳水、力量训练
+  ring($('rings'), 130, 118, 20, ti.kcal / T.kcal_high, 'kcal', 'kcal-track');
   $('r-kcal').innerHTML = `${fmt(ti.kcal)}<small>/ ${fmt(T.kcal_high)} 千卡</small>`;
   const left = T.kcal_high - ti.kcal;
-  $('r-kcal-h').textContent = left >= 0 ? `还能吃 ${fmt(left)} 千卡` : `超了 ${fmt(-left)} 千卡`;
-  $('r-pro').innerHTML = `${fmt(ti.protein)}<small>/ ${T.protein_goal} 克</small>`;
-  const lp = T.protein_goal - ti.protein;
-  $('r-pro-h').textContent = lp > 0 ? `还差 ${fmt(lp)} 克` : '已达标';
+  $('r-kcal-h').textContent = left >= 0 ? `还能吃 ${fmt(left)}` : `超了 ${fmt(-left)}`;
+  const minis = [
+    ['pro', '蛋白质', ti.protein, T.protein_goal, '克'],
+    ['fat', '脂肪', ti.fat, T.fat_goal, '克'],
+    ['carb', '碳水', ti.carbs, T.carb_goal, '克'],
+    ['train', '力量', D.week.strength, T.strength_per_week, '次/周'],
+  ];
+  $('minis').innerHTML = minis.map(([c, label, val, goal, unit]) =>
+    `<div class="mini"><div class="mr"><svg viewBox="0 0 64 64" data-c="${c}" data-f="${val == null ? 0 : val / goal}"></svg>
+      <div class="mv">${val == null ? '—' : fmt(val)}</div></div>
+      <div class="ml">${label}<small>/ ${goal} ${unit}</small></div></div>`).join('');
+  document.querySelectorAll('#minis svg').forEach((s) => ring(s, 32, 27, 8, +s.dataset.f, s.dataset.c, s.dataset.c + '-track'));
   $('advice').textContent = D.advice;
 
   const W = D.week;
@@ -287,11 +305,15 @@ document.addEventListener('touchmove', (e) => { if (e.touches.length > 1) e.prev
     row('#8D929A', 'scale', '今早体重', ti.weight == null ? '—' : ti.weight.toFixed(2), '公斤',
       ti.weightDelta == null ? (ti.weight == null ? '今天还没称' : '') : `比上次 ${signed(ti.weightDelta)}`) +
     row(v('kcal'), 'trend', '最近 7 次平均', W.avgWeight.toFixed(2), '公斤', `比起点 ${T.start_weight} ${signed(W.weightChange)}`) +
+    row('#8D929A', 'scale', '今早体脂率', ti.bodyFat == null ? '—' : ti.bodyFat.toFixed(1), '%',
+      W.medBodyFat == null ? '' : `最近几次的中位数 ${W.medBodyFat.toFixed(1)}%，单天会跳`) +
     row('#8D929A', 'days', '已经连续记录', D.streak, '天', `从 ${md(D.startDate)} 开始`);
   $('week-range').textContent = `${md(W.from)}–${md(W.to)}`;
   $('g-week').innerHTML =
     row(v('kcal'), 'flame', '平均热量', fmt(W.avgKcal), '千卡', `目标 ${fmt(T.kcal_low)}–${fmt(T.kcal_high)}`) +
     row(v('pro'), 'egg', '平均蛋白质', fmt(W.avgProtein), '克', `${W.daysLogged} 天里有 ${W.proteinDays} 天到 ${T.protein_goal} 克`) +
+    (W.macroDays ? row(v('fat'), 'egg', '平均脂肪', fmt(W.avgFat), '克', `目标 ${T.fat_goal} 克，${W.macroDays} 天有数据`) +
+                   row(v('carb'), 'flame', '平均碳水', fmt(W.avgCarbs), '克', `目标 ${T.carb_goal} 克左右`) : '') +
     row(v('train'), 'bolt', '力量训练', W.strength, `/ ${T.strength_per_week} 次`, '');
   $('foot').innerHTML = `数据更新于 ${D.updated}<br>身体是唯一不能回滚的生产环境<br><span style="opacity:.6">页面版本 ${D.built}</span>`;
 
@@ -376,6 +398,20 @@ document.addEventListener('touchmove', (e) => { if (e.touches.length > 1) e.prev
         <span><i style="width:14px;height:1px;background:${v('ink2')}"></i>起点</span>`;
       const wv = ws.map((r) => r.weight);
       stats = wv.length ? [['最低', Math.min(...wv).toFixed(2), '公斤'], ['最高', Math.max(...wv).toFixed(2), '公斤'], ['称了', wv.length, `/ ${days.length} 天`]] : [];
+    } else if (metric === 'bodyFat') {
+      const vals = days.filter((r) => r.bodyFat != null).map((r) => r.bodyFat);
+      const lo = vals.length ? Math.floor(Math.min(...vals) - 0.5) : 20, hi = vals.length ? Math.ceil(Math.max(...vals) + 0.5) : 30;
+      const ticks = []; for (let t = lo; t <= hi + 1e-9; t += 1) ticks.push(t);
+      const f = frame(box, days, lo, hi, ticks, (t) => t + '%');
+      const pts = [];
+      days.forEach((r, i) => { if (r.bodyFat == null) return; pts.push([f.X(i), f.Y(r.bodyFat)]); });
+      if (pts.length > 1) el('polyline', { points: pts.map((p) => p.join(',')).join(' '), fill: 'none', stroke: v('dot'), 'stroke-width': 1.5, 'stroke-linejoin': 'round' }, f.svg);
+      pts.forEach(([x, y]) => el('circle', { cx: x, cy: y, r: 4.5, fill: v('kcal'), stroke: v('surface'), 'stroke-width': 2 }, f.svg));
+      f.label = (r) => r.bodyFat == null ? '' : `体脂率 <b>${r.bodyFat.toFixed(1)}%</b>`;
+      $('ch-big').innerHTML = W.medBodyFat == null ? '—' : `${W.medBodyFat.toFixed(1)}<small>%</small>`;
+      $('ch-cap').textContent = '最近几次的中位数；体脂秤受水分影响，单天会跳，看几周的趋势';
+      $('keys').innerHTML = `<span><i style="width:8px;height:8px;border-radius:50%;background:${v('kcal')}"></i>每次测量</span>`;
+      stats = vals.length ? [['最低', Math.min(...vals).toFixed(1), '%'], ['最高', Math.max(...vals).toFixed(1), '%'], ['测了', vals.length, `/ ${days.length} 天`]] : [];
     } else {
       const isK = metric === 'kcal', key = metric, color = isK ? 'kcal' : 'pro';
       const goalTop = isK ? T.kcal_high : T.protein_goal, step = isK ? 500 : 50;
@@ -479,6 +515,7 @@ document.addEventListener('touchmove', (e) => { if (e.touches.length > 1) e.prev
   window.addEventListener('scroll', onScroll, { passive: true });
   $('tabbar').addEventListener('click', (ev) => { const b = ev.target.closest('button'); if (b) go(b.dataset.v, true); });
   let rt; window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if ($('v-trends').classList.contains('on')) drawChart(); }, 120); });
+  window.addEventListener('hashchange', () => go(location.hash.slice(1), false));
   go((location.hash || '#today').slice(1), false);
 })();
 </script>
