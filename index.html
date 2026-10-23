@@ -24,6 +24,7 @@
   --fat: #EDA100; --fat-track: rgba(237,161,0,.18);
   --carb: #E87BA4; --carb-track: rgba(232,123,164,.18);
   --over: #FF3B30;
+  --sleep: #5E5CE6;
   --dot: #A9AEB6; --tip: #FFFFFF; --shadow: 0 8px 28px rgba(21,23,26,.12);
   --seg: #E4E6EA; --seg-on: #FFFFFF;
   --hero: #15171A; --hero-line: rgba(255,255,255,.08); --goal: #2BD49A;
@@ -41,6 +42,7 @@
     --fat: #C98500; --fat-track: rgba(201,133,0,.26);
     --carb: #D55181; --carb-track: rgba(213,81,129,.26);
     --over: #FF453A;
+    --sleep: #7D7AFF;
     --dot: #5E636B; --tip: #23272D; --shadow: 0 8px 28px rgba(0,0,0,.5);
     --seg: #23272D; --seg-on: #3A3F47;
     --hero: #1F2A26; --hero-line: rgba(255,255,255,.10); --goal: #2BD49A;
@@ -230,6 +232,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
     <div class="gh"><h2>身体</h2></div>
     <div class="group" id="g-body"></div>
 
+    <div class="gh"><h2>活动和睡眠</h2><span>Apple Watch</span></div>
+    <div class="group" id="g-act"></div>
+
     <div class="gh"><h2>近 7 天</h2><span id="week-range"></span></div>
     <div class="group" id="g-week"></div>
 
@@ -244,6 +249,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
       <button data-m="bodyFat" aria-pressed="false">体脂</button>
       <button data-m="kcal" aria-pressed="false">热量</button>
       <button data-m="protein" aria-pressed="false">蛋白质</button>
+      <button data-m="steps" aria-pressed="false">步数</button>
+      <button data-m="sleep" aria-pressed="false">睡眠</button>
     </div>
     <div class="chart-card">
       <div class="chart-head"><div class="big" id="ch-big"></div><div class="cap" id="ch-cap"></div></div>
@@ -297,7 +304,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   <button role="tab" data-v="train" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>训练</button>
 </nav>
 
-<script id="data" type="application/json">{"streak": 14, "startDate": "2026-10-10", "advice": "这周先把第一次力量练了，在家 15 分钟就算。", "log": [{"date": "2026-10-10", "kcal": 1770, "protein": 86, "fat": null, "carbs": null, "weight": null, "bodyFat": null, "strength": 0, "walk": 1}, {"date": "2026-10-11", "kcal": 2015, "protein": 137, "fat": null, "carbs": null, "weight": 78.58, "bodyFat": null, "strength": 1, "walk": 1}, {"date": "2026-10-12", "kcal": 1750, "protein": 81, "fat": null, "carbs": null, "weight": 78.37, "bodyFat": null, "strength": 0, "walk": 0}, {"date": "2026-10-13", "kcal": 1845, "protein": 121, "fat": null, "carbs": null, "weight": 77.85, "bodyFat": null, "strength": 0, "walk": 0}, {"date": "2026-10-14", "kcal": 1870, "protein": 81, "fat": null, "carbs": null, "weight": 78.35, "bodyFat": null, "strength": 0, "walk": 0}, {"date": "2026-10-15", "kcal": 2310, "protein": 134, "fat": null, "carbs": null, "weight": 77.75, "bodyFat": null, "strength": 0, "walk": 0}, {"date": "2026-10-16", "kcal": 1970, "protein": 119, "fat": null, "carbs": null, "weight": 78.3, "bodyFat": null, "strength": 0, "walk": 0}, {"date": "2026-10-17", "kcal": 1530, "protein": 60, "fat": null, "carbs": null, "weight": 78.4, "bodyFat": null, "strength": 0, "walk": 0}, {"date": "2026-10-18", "kcal": 2130, "protein": 102, "fat": null, "carbs": null, "weight": null, "bodyFat": null, "strength": 0, "walk": 0}, {"date": "2026-10-19", "kcal": 1591, "protein": 111, "fat": null, "carbs": null, "weight": 78.0, "bodyFat": 23.9, "strength": 0, "walk": 0}, {"date": "2026-10-20", "kcal": 2130, "protein": 129, "fat": null, "carbs": null, "weight": 77.93, "bodyFat": 25.8, "strength": 0, "walk": 0}, {"date": "2026-10-21", "kcal": 1940, "protein": 121, "fat": null, "carbs": null, "weight": 78.0, "bodyFat": 23.5, "strength": 0, "walk": 0}, {"date": "2026-10-22", "kcal": 1975, "protein": 122, "fat": 75, "carbs": 203, "weight": 77.65, "bodyFat": 23.9, "strength": 0, "walk": 0}, {"date": "2026-10-23", "kcal": 1197, "protein": 78, "fat": 48, "carbs": 111, "weight": 77.55, "bodyFat": 23.8, "strength": 0, "walk": 0}], "workouts": [{"date": "2026-10-11", "kind": "力量"}, {"date": "2026-10-11", "kind": "走路"}, {"date": "2026-10-10", "kind": "走路"}], "updated": "2026-10-23 12:33", "built": "1023.1233", "today": "2026-10-23", "targets": {"kcal_low": 2000, "kcal_high": 2100, "protein_goal": 130, "fat_goal": 60, "carb_goal": 250, "strength_per_week": 2, "start_weight": 78.58, "body_fat_start": 23.9, "body_fat_goal": 17, "body_fat_goal_date": "2027-01-22"}, "take": "近 7 天平均 1,895 千卡、蛋白 109 克，力量训练 0 次。这周先把第一次力量练了，在家 15 分钟就算。", "todayInfo": {"kcal": 1197, "protein": 78, "fat": 48, "carbs": 111, "bodyFat": 23.8, "weight": 77.55, "weightDelta": -0.1}, "week": {"from": "2026-10-16", "to": "2026-10-22", "avgKcal": 1895, "avgProtein": 109, "proteinDays": 0, "daysLogged": 7, "avgWeight": 77.98, "weightChange": -0.6, "strength": 0, "avgFat": 75.0, "avgCarbs": 203.0, "macroDays": 1, "medBodyFat": 23.9}, "days": [{"date": "2026-10-10", "kcal": 1770, "protein": 86, "fat": null, "carbs": null, "bodyFat": null, "weight": null, "avg7": null, "strength": 0, "walk": 1}, {"date": "2026-10-11", "kcal": 2015, "protein": 137, "fat": null, "carbs": null, "bodyFat": null, "weight": 78.58, "avg7": 78.58, "strength": 1, "walk": 1}, {"date": "2026-10-12", "kcal": 1750, "protein": 81, "fat": null, "carbs": null, "bodyFat": null, "weight": 78.37, "avg7": 78.47, "strength": 0, "walk": 0}, {"date": "2026-10-13", "kcal": 1845, "protein": 121, "fat": null, "carbs": null, "bodyFat": null, "weight": 77.85, "avg7": 78.27, "strength": 0, "walk": 0}, {"date": "2026-10-14", "kcal": 1870, "protein": 81, "fat": null, "carbs": null, "bodyFat": null, "weight": 78.35, "avg7": 78.29, "strength": 0, "walk": 0}, {"date": "2026-10-15", "kcal": 2310, "protein": 134, "fat": null, "carbs": null, "bodyFat": null, "weight": 77.75, "avg7": 78.18, "strength": 0, "walk": 0}, {"date": "2026-10-16", "kcal": 1970, "protein": 119, "fat": null, "carbs": null, "bodyFat": null, "weight": 78.3, "avg7": 78.2, "strength": 0, "walk": 0}, {"date": "2026-10-17", "kcal": 1530, "protein": 60, "fat": null, "carbs": null, "bodyFat": null, "weight": 78.4, "avg7": 78.23, "strength": 0, "walk": 0}, {"date": "2026-10-18", "kcal": 2130, "protein": 102, "fat": null, "carbs": null, "bodyFat": null, "weight": null, "avg7": null, "strength": 0, "walk": 0}, {"date": "2026-10-19", "kcal": 1591, "protein": 111, "fat": null, "carbs": null, "bodyFat": 23.9, "weight": 78.0, "avg7": 78.15, "strength": 0, "walk": 0}, {"date": "2026-10-20", "kcal": 2130, "protein": 129, "fat": null, "carbs": null, "bodyFat": 25.8, "weight": 77.93, "avg7": 78.08, "strength": 0, "walk": 0}, {"date": "2026-10-21", "kcal": 1940, "protein": 121, "fat": null, "carbs": null, "bodyFat": 23.5, "weight": 78.0, "avg7": 78.1, "strength": 0, "walk": 0}, {"date": "2026-10-22", "kcal": 1975, "protein": 122, "fat": 75, "carbs": 203, "bodyFat": 23.9, "weight": 77.65, "avg7": 78.0, "strength": 0, "walk": 0}, {"date": "2026-10-23", "kcal": 1197, "protein": 78, "fat": 48, "carbs": 111, "bodyFat": 23.8, "weight": 77.55, "avg7": 77.98, "strength": 0, "walk": 0}]}</script>
+<script id="data" type="application/json">{"streak": 14, "startDate": "2026-10-10", "advice": "这周先把第一次力量练了，在家 15 分钟就算。", "log": [{"date": "2026-10-10", "kcal": 1770, "protein": 86, "fat": null, "carbs": null, "weight": null, "bodyFat": null, "strength": 0, "walk": 1}, {"date": "2026-10-11", "kcal": 2015, "protein": 137, "fat": null, "carbs": null, "weight": 78.58, "bodyFat": 23.9, "strength": 1, "walk": 1}, {"date": "2026-10-12", "kcal": 1750, "protein": 81, "fat": null, "carbs": null, "weight": 78.37, "bodyFat": 24.1, "strength": 0, "walk": 0}, {"date": "2026-10-13", "kcal": 1845, "protein": 121, "fat": null, "carbs": null, "weight": 77.85, "bodyFat": 23.8, "strength": 0, "walk": 0}, {"date": "2026-10-14", "kcal": 1870, "protein": 81, "fat": null, "carbs": null, "weight": 78.35, "bodyFat": 23.6, "strength": 0, "walk": 0}, {"date": "2026-10-15", "kcal": 2310, "protein": 134, "fat": null, "carbs": null, "weight": 77.75, "bodyFat": 23.8, "strength": 0, "walk": 0}, {"date": "2026-10-16", "kcal": 1970, "protein": 119, "fat": null, "carbs": null, "weight": 78.3, "bodyFat": 23.9, "strength": 0, "walk": 0}, {"date": "2026-10-17", "kcal": 1530, "protein": 60, "fat": null, "carbs": null, "weight": 78.4, "bodyFat": 24.0, "strength": 0, "walk": 0}, {"date": "2026-10-18", "kcal": 2130, "protein": 102, "fat": null, "carbs": null, "weight": null, "bodyFat": null, "strength": 0, "walk": 0}, {"date": "2026-10-19", "kcal": 1591, "protein": 111, "fat": null, "carbs": null, "weight": 78.0, "bodyFat": 23.9, "strength": 0, "walk": 0}, {"date": "2026-10-20", "kcal": 2130, "protein": 129, "fat": null, "carbs": null, "weight": 77.93, "bodyFat": 25.8, "strength": 0, "walk": 0}, {"date": "2026-10-21", "kcal": 1940, "protein": 121, "fat": null, "carbs": null, "weight": 78.0, "bodyFat": 23.5, "strength": 0, "walk": 0}, {"date": "2026-10-22", "kcal": 1975, "protein": 122, "fat": 75, "carbs": 203, "weight": 77.65, "bodyFat": 23.9, "strength": 0, "walk": 0}, {"date": "2026-10-23", "kcal": 1197, "protein": 78, "fat": 48, "carbs": 111, "weight": 77.55, "bodyFat": 23.8, "strength": 0, "walk": 0}], "workouts": [{"date": "2026-10-11", "kind": "力量"}, {"date": "2026-10-11", "kind": "走路"}, {"date": "2026-10-10", "kind": "走路"}], "updated": "2026-10-23 16:55", "built": "1023.1655", "today": "2026-10-23", "targets": {"kcal_low": 2000, "kcal_high": 2100, "protein_goal": 130, "fat_goal": 60, "carb_goal": 250, "strength_per_week": 2, "start_weight": 78.58, "body_fat_start": 23.9, "body_fat_goal": 17, "body_fat_goal_date": "2027-01-22"}, "take": "近 7 天平均 1,895 千卡、蛋白 109 克，力量训练 0 次。这周先把第一次力量练了，在家 15 分钟就算。", "todayInfo": {"kcal": 1197, "protein": 78, "fat": 48, "carbs": 111, "bodyFat": 23.8, "weight": 77.55, "weightDelta": -0.1}, "week": {"from": "2026-10-16", "to": "2026-10-22", "avgKcal": 1895, "avgProtein": 109, "proteinDays": 0, "daysLogged": 7, "avgWeight": 77.98, "weightChange": -0.6, "strength": 0, "avgFat": 75.0, "avgCarbs": 203.0, "macroDays": 1, "medBodyFat": 23.9, "avgSteps": 3336.0, "stepDays": 7, "avgSleep": 6.9, "sleepNights": 3}, "yday": {"steps": 3522, "sleep": null}, "days": [{"date": "2026-10-10", "kcal": 1770, "protein": 86, "fat": null, "carbs": null, "bodyFat": null, "weight": null, "avg7": null, "strength": 0, "walk": 1, "steps": 7831, "sleep": null}, {"date": "2026-10-11", "kcal": 2015, "protein": 137, "fat": null, "carbs": null, "bodyFat": 23.9, "weight": 78.58, "avg7": 78.58, "strength": 1, "walk": 1, "steps": 6402, "sleep": null}, {"date": "2026-10-12", "kcal": 1750, "protein": 81, "fat": null, "carbs": null, "bodyFat": 24.1, "weight": 78.37, "avg7": 78.47, "strength": 0, "walk": 0, "steps": 4389, "sleep": 7.1}, {"date": "2026-10-13", "kcal": 1845, "protein": 121, "fat": null, "carbs": null, "bodyFat": 23.8, "weight": 77.85, "avg7": 78.27, "strength": 0, "walk": 0, "steps": 6270, "sleep": 5.6}, {"date": "2026-10-14", "kcal": 1870, "protein": 81, "fat": null, "carbs": null, "bodyFat": 23.6, "weight": 78.35, "avg7": 78.29, "strength": 0, "walk": 0, "steps": 3588, "sleep": 8.1}, {"date": "2026-10-15", "kcal": 2310, "protein": 134, "fat": null, "carbs": null, "bodyFat": 23.8, "weight": 77.75, "avg7": 78.18, "strength": 0, "walk": 0, "steps": 3625, "sleep": 5.5}, {"date": "2026-10-16", "kcal": 1970, "protein": 119, "fat": null, "carbs": null, "bodyFat": 23.9, "weight": 78.3, "avg7": 78.2, "strength": 0, "walk": 0, "steps": 3903, "sleep": 6.9}, {"date": "2026-10-17", "kcal": 1530, "protein": 60, "fat": null, "carbs": null, "bodyFat": 24.0, "weight": 78.4, "avg7": 78.23, "strength": 0, "walk": 0, "steps": 1318, "sleep": 6.9}, {"date": "2026-10-18", "kcal": 2130, "protein": 102, "fat": null, "carbs": null, "bodyFat": null, "weight": null, "avg7": null, "strength": 0, "walk": 0, "steps": 3115, "sleep": 5.6}, {"date": "2026-10-19", "kcal": 1591, "protein": 111, "fat": null, "carbs": null, "bodyFat": 23.9, "weight": 78.0, "avg7": 78.15, "strength": 0, "walk": 0, "steps": 3974, "sleep": 8.3}, {"date": "2026-10-20", "kcal": 2130, "protein": 129, "fat": null, "carbs": null, "bodyFat": 25.8, "weight": 77.93, "avg7": 78.08, "strength": 0, "walk": 0, "steps": 4577, "sleep": null}, {"date": "2026-10-21", "kcal": 1940, "protein": 121, "fat": null, "carbs": null, "bodyFat": 23.5, "weight": 78.0, "avg7": 78.1, "strength": 0, "walk": 0, "steps": 2941, "sleep": null}, {"date": "2026-10-22", "kcal": 1975, "protein": 122, "fat": 75, "carbs": 203, "bodyFat": 23.9, "weight": 77.65, "avg7": 78.0, "strength": 0, "walk": 0, "steps": 3522, "sleep": null}, {"date": "2026-10-23", "kcal": 1197, "protein": 78, "fat": 48, "carbs": 111, "bodyFat": 23.8, "weight": 77.55, "avg7": 77.98, "strength": 0, "walk": 0, "steps": null, "sleep": null}]}</script>
 <script>
 // 像 App 一样：不允许双指缩放（iOS Safari 会忽略 viewport 里的 user-scalable，所以再拦一次手势事件）
 ['gesturestart', 'gesturechange', 'gestureend'].forEach((t) => document.addEventListener(t, (e) => e.preventDefault(), { passive: false }));
@@ -460,6 +467,8 @@ document.addEventListener('touchmove', (e) => { if (e.touches.length > 1) e.prev
     bolt: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>',
     walk: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4.5" r="1.5"/><path d="M10 21l2-6 3 3v3M9 12l2-4 3 2 3 1M12 8l-1 7"/></svg>',
     days: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg>',
+    steps: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4.5" r="1.5"/><path d="M10 21l2-6 3 3v3M9 12l2-4 3 2 3 1M12 8l-1 7"/></svg>',
+    moon: '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>',
   };
   const row = (bg, ic, label, value, unit, note) =>
     `<div class="row"><span class="badge" style="background:${bg}">${icon[ic]}</span>
@@ -473,6 +482,12 @@ document.addEventListener('touchmove', (e) => { if (e.touches.length > 1) e.prev
       W.medBodyFat == null ? '' : `最近几次的中位数 ${W.medBodyFat.toFixed(1)}%，单天会跳`) +
 
     row('#8D929A', 'days', '已经连续记录', D.streak, '天', `从 ${md(D.startDate)} 开始`);
+  const Y = D.yday;
+  $('g-act').innerHTML =
+    row(v('train'), 'steps', '昨天走了', Y.steps == null ? '—' : fmt(Y.steps), '步',
+      W.avgSteps == null ? '' : `近 7 天平均 ${fmt(W.avgSteps)} 步`) +
+    row(v('sleep'), 'moon', '昨晚睡了', Y.sleep == null ? '—' : Y.sleep.toFixed(1), Y.sleep == null ? '' : '小时',
+      Y.sleep == null ? '没记到，戴着手表睡才有' : `近 7 晚平均 ${W.avgSleep.toFixed(1)} 小时`);
   $('week-range').textContent = `${md(W.from)}–${md(W.to)}`;
   $('g-week').innerHTML =
     row(v('kcal'), 'flame', '平均热量', fmt(W.avgKcal), '千卡', `目标 ${fmt(T.kcal_low)}–${fmt(T.kcal_high)}`) +
@@ -582,6 +597,22 @@ document.addEventListener('touchmove', (e) => { if (e.touches.length > 1) e.prev
       $('ch-cap').textContent = '最近几次的中位数；体脂秤受水分影响，单天会跳，看几周的趋势';
       $('keys').innerHTML = `<span><i style="width:8px;height:8px;border-radius:50%;background:${v('kcal')}"></i>每次测量</span>`;
       stats = vals.length ? [['最低', Math.min(...vals).toFixed(1), '%'], ['最高', Math.max(...vals).toFixed(1), '%'], ['测了', vals.length, `/ ${days.length} 天`]] : [];
+    } else if (metric === 'steps' || metric === 'sleep') {
+      // 都是过完的日子才有数：步数是那一天走的，睡眠记在醒来的那天
+      const isS = metric === 'steps', key = metric, color = isS ? 'train' : 'sleep', unit = isS ? '步' : '小时';
+      const vals = days.map((r) => r[key]).filter((x) => x != null);
+      const step = isS ? 2000 : 2, top = Math.max(isS ? 8000 : 10, Math.ceil((Math.max(0, ...vals) + (isS ? 1 : 0.1)) / step) * step);
+      const ticks = []; for (let t = 0; t <= top; t += step) ticks.push(t);
+      const f = frame(box, days, 0, top, ticks, isS ? ((t) => t ? (t / 1000) + 'K' : '0') : ((t) => t + 'h'));
+      bars(f, key, top, color, {});
+      el('line', { x1: f.L, x2: f.Wd - f.R, y1: f.Y(0), y2: f.Y(0), stroke: v('muted'), 'stroke-opacity': .5 }, f.svg);
+      const show = (x) => isS ? fmt(x) : x.toFixed(1);
+      f.label = (r) => r[key] == null ? '' : `<b>${show(r[key])}</b> ${unit}`;
+      const avg = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+      $('ch-big').innerHTML = avg == null ? '—' : `${show(avg)}<small>${unit} / ${isS ? '天' : '晚'}</small>`;
+      $('ch-cap').textContent = avg == null ? '' : isS ? `有数据的 ${vals.length} 天平均` : `有记录的 ${vals.length} 晚平均；没戴手表睡觉的晚上没有数`;
+      $('keys').innerHTML = `<span><i style="width:10px;height:10px;border-radius:3px;background:${v(color)}"></i>${isS ? '每天' : '每晚，按醒来那天'}</span>`;
+      stats = vals.length ? [['最少', show(Math.min(...vals)), unit], ['最多', show(Math.max(...vals)), unit], [isS ? '有数据' : '有记录', vals.length, `/ ${days.length} ${isS ? '天' : '晚'}`]] : [];
     } else {
       const isK = metric === 'kcal', key = metric, color = isK ? 'kcal' : 'pro';
       const goalTop = isK ? T.kcal_high : T.protein_goal, step = isK ? 500 : 50;
