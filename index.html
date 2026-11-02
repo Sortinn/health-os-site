@@ -544,7 +544,7 @@ document.addEventListener('touchmove', (e) => { if (e.touches.length > 1) e.prev
       const chip = future ? '' : a == null ? '<span class="chip2 idle">没测</span>' : isNow ? '<span class="chip2 idle">本周</span>'
         : a <= p + 0.3 ? '<span class="chip2 good">✓</span>' : '<span class="chip2 warn">落后</span>';
       rowsHtml += `<div class="row logrow cols wk ${isNow ? 'now' : ''}">
-        <span class="d">${k === weeks ? '终点' : `第 ${k} 周`}<small>${md(iso(ws))}–${md(iso(we))}${k === cpWeek && CP ? ' 检查点' : ''}</small></span>
+        <span class="d">${k === weeks ? '终点' : k === cpWeek && CP ? '检查点' : `第 ${k} 周`}<small>${md(iso(ws))}–${md(iso(we))}</small></span>
         <span class="c">${p.toFixed(1)}%</span>
         <span class="c ${a == null ? 'dim' : ''}">${a == null ? '—' : a.toFixed(1) + '%'}</span>
         <span class="c">${chip}</span></div>`;
